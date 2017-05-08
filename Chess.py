@@ -69,17 +69,19 @@ class Piece:
     def remove_piece(self, Piece):
         player_pieces -= Piece
 
+    def set_poss_moves(self):
+        self.poss_moves = []
+
     def move_piece(self, name, position):
         if position in self.poss_moves:
+            if position.filled:
+                remove(position.piece)
             self.position = position
             position.piece = self
+            self.set_poss_moves
+            
         else:
             print "Invalid move"
-
-    def overtake_piece(self, name, position):
-        if position.filled:
-            remove(position.piece)
-        move_piece(self, name, position) 
 
 class Pawn(Piece):
     """A Pawn is a Piece that can overtake other pieces diagonally by one space
@@ -88,6 +90,8 @@ class Pawn(Piece):
     def __init__(self, name, position, board, player):
         super(Pawn, self).__init__()
         self.move_count = 0
+
+    def set_poss_moves(self):
         curr_column = self.curr_column
         curr_row = self.curr_row
         if move_count == 0:
@@ -115,6 +119,7 @@ class Rook(Piece):
     overtake pieces that are within its possible moves."""
     def __init__(self, name, position, board, player):
         super(Rook, self).__init__()
+    def set_poss_moves(self):
         curr_column = self.curr_column
         curr_row = self.curr_row
         for i in range(8):
@@ -129,26 +134,43 @@ class Bishop(Piece):
     movement range."""
     def __init__(self, name, position, board, player)::
         super(Bishop, self)__init__()
+
+    def set_poss_moves(self):
         curr_column = self.curr_column
         curr_row = self.curr_row
-        
+        if curr_column < 7:
+            for i in range(9-curr_column):
+                self.poss_moves.append(Position(curr_column+i, curr_row+i))
+                self.poss_moves.append(Position(curr_column+i, curr_row-i))
+        if curr_column > 0:
+            for i in range(1,8)::
+                self.poss_moves.append(Position(curr_column-i, curr_row+i))
+                self.poss_moves.append(Position(curr_column-i, curr_row-i))
 class Knight(Piece):
     """A Knight is a Piece that can move in 'L' shapes. It overtakes pieces that are 
     within its movement range."""
     def __init__(self, name, position, board, player):
         super(Knight, self)__init__()
-    
+
+    def set_poss_moves(self):
+        curr_column = self.curr_column
+        curr_row = self.curr_row
+         
 class Queen(Piece):
     """A queen can move anywhere diagonally, in its column, or in its row. It overtakes
     pieces that are within its movement range."""
     def __init__(self, name, position, board, player):
         super(Queen, self)__init__()
-
+    def set_poss_moves(self):
+        
 class King(Piece):
     """A King is a Piece that can move one Position in any direction. If the King is
     in a position to be overtaken, that player's King is in "Check". If there are no
     moves a player can make to save the King, the game ends."""
     def __init__(self, name, position, board, player):
         super(Kingt, self)__init__()
+
+    def set_poss_moves(self):
+        
 #End game scenarios
 
